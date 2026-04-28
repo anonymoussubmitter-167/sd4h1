@@ -1,0 +1,65 @@
+preprocessing:
+  min_genes: 200
+  min_cells: 3
+  n_top_genes: 2000
+  target_sum: 10000.0
+
+graph:
+  k_spatial: 6
+  k_expression: 3
+  sigma: null  # auto-compute from median NN distance
+  expression_threshold: 0.5
+
+spatial_gnn:
+  input_dim: 2000
+  hidden_dim: 256
+  num_layers: 3
+  num_heads: 4
+  dropout: 0.1
+  spatial_dim: 2
+
+multi_scale:
+  pool_ratios:
+    - 0.25
+    - 0.25
+  embed_dim: 256
+  num_gnn_layers_per_level: 2
+
+data:
+  species: "mouse"
+  platform: "visium"
+
+training:
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  max_epochs: 100
+  batch_size: 1
+  num_workers: 4
+  mask_ratio: 0.2
+  lambda_contrast: 0.1
+  lambda_link: 1.0
+  lambda_entropy: 1.0
+  contrastive_temperature: 0.1
+  contrastive_n_negatives: 256
+  max_nodes: 5000
+  val_fraction: 0.1
+  lr_scheduler: "cosine"
+  warmup_epochs: 5
+  gradient_clip_val: 1.0
+
+bridge:
+  alpha: 0.3                          # FGW trade-off (0=feature only, 1=structure only)
+  epsilon: 0.005                      # Entropic regularization (lowered for sharper plans)
+  fgw_max_iter: 20                    # FGW outer iterations (converges early with log-domain)
+  sinkhorn_max_iter: 50               # Inner Sinkhorn iterations for log-domain
+  lambda_fgw: 1.0                     # FGW alignment loss weight
+  lambda_cross_contrastive: 0.5
+  cross_contrastive_top_k: 5          # Top-k matches from transport plan
+  cross_contrastive_temperature: 0.1
+  n_alternating_iters: 5              # Alternating FGW <-> fine-tune iterations
+  max_nodes_per_species: 3000         # Subsample for FGW memory
+  finetune_epochs_per_iter: 10
+  finetune_lr: 0.0001
+  projection_hidden_dim: 128          # Projection head hidden dim
+  freeze_encoder_epochs: 10           # Epochs to keep encoders frozen
+  lambda_mmd: 10.0                    # MMD distribution matching loss weight

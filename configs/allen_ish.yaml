@@ -1,0 +1,35 @@
+# Allen Brain ISH specific preprocessing configuration
+# Allen ISH: voxel grid with expression energy values, ~200-2000 genes
+# Already summarized to voxels — no HVG needed, no count normalization
+
+preprocessing:
+  min_genes: 1          # Voxels may have sparse gene coverage
+  min_cells: 1          # Keep all voxels that have any expression
+  n_top_genes: 2000     # Will use all available genes (typically < 2000)
+  target_sum: 10000.0
+  normalize: false       # Expression energy is already a summary statistic
+  log_transform: false   # Already processed values
+  select_hvg: false      # Limited gene set, keep all
+
+graph:
+  k_spatial: 6          # 3D voxel grid projected to 2D
+  k_expression: 3
+  sigma: null
+  expression_threshold: 0.5
+
+spatial_gnn:
+  input_dim: 500        # Depends on number of genes downloaded
+  hidden_dim: 128       # Smaller model for fewer features
+  num_layers: 2
+  num_heads: 4
+  dropout: 0.1
+  spatial_dim: 2
+
+multi_scale:
+  pool_ratios: [0.25, 0.25]
+  embed_dim: 128
+  num_gnn_layers_per_level: 2
+
+data:
+  species: "mouse"
+  platform: "allen_ish"

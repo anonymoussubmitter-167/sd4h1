@@ -1,0 +1,35 @@
+# Stereo-seq specific preprocessing configuration
+# Stereo-seq: subcellular resolution binned to cells/bins, ~20k+ genes
+# Very high resolution — typically bin to ~50um or cell-level before analysis
+
+preprocessing:
+  min_genes: 100        # Bins may have fewer genes than Visium spots
+  min_cells: 5
+  n_top_genes: 2000
+  target_sum: 10000.0
+  normalize: true
+  log_transform: true
+  select_hvg: true
+
+graph:
+  k_spatial: 8          # Stereo-seq has regular grid structure
+  k_expression: 3
+  sigma: null
+  expression_threshold: 0.5
+
+spatial_gnn:
+  input_dim: 2000
+  hidden_dim: 256
+  num_layers: 3
+  num_heads: 4
+  dropout: 0.1
+  spatial_dim: 2
+
+multi_scale:
+  pool_ratios: [0.1, 0.25]  # First pool aggressive (many bins), second moderate
+  embed_dim: 256
+  num_gnn_layers_per_level: 2
+
+data:
+  species: "zebrafish"
+  platform: "stereoseq"

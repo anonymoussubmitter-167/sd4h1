@@ -1,0 +1,36 @@
+# MERFISH-specific preprocessing configuration
+# MERFISH: ~100-500 targeted genes, thousands to millions of cells
+# Already targeted panel — skip HVG selection
+# Cell-level (not spot-level) — different normalization
+
+preprocessing:
+  min_genes: 5          # Lower threshold: MERFISH has far fewer genes
+  min_cells: 10         # More cells available, can be stricter
+  n_top_genes: 500      # Use all/most genes (panel is already targeted)
+  target_sum: 100.0     # Lower target sum for targeted panels
+  normalize: true
+  log_transform: true
+  select_hvg: false     # Skip HVG — genes are already curated by panel design
+
+graph:
+  k_spatial: 10         # MERFISH has denser cell packing
+  k_expression: 5
+  sigma: null
+  expression_threshold: 0.5
+
+spatial_gnn:
+  input_dim: 500        # Match gene panel size (varies per experiment)
+  hidden_dim: 256
+  num_layers: 3
+  num_heads: 4
+  dropout: 0.1
+  spatial_dim: 2
+
+multi_scale:
+  pool_ratios: [0.1, 0.1]   # More aggressive pooling for dense data
+  embed_dim: 256
+  num_gnn_layers_per_level: 2
+
+data:
+  species: "mouse"
+  platform: "merfish"

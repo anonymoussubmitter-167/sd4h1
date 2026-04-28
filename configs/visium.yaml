@@ -1,0 +1,35 @@
+# Visium-specific preprocessing configuration
+# Standard 10x Visium: ~20k genes, ~3000-5000 spots per section
+# Requires full normalization + HVG selection pipeline
+
+preprocessing:
+  min_genes: 200
+  min_cells: 3
+  n_top_genes: 2000
+  target_sum: 10000.0
+  normalize: true
+  log_transform: true
+  select_hvg: true
+
+graph:
+  k_spatial: 6        # Visium hex grid has 6 immediate neighbors
+  k_expression: 3
+  sigma: null
+  expression_threshold: 0.5
+
+spatial_gnn:
+  input_dim: 2000
+  hidden_dim: 256
+  num_layers: 3
+  num_heads: 4
+  dropout: 0.1
+  spatial_dim: 2
+
+multi_scale:
+  pool_ratios: [0.25, 0.25]
+  embed_dim: 256
+  num_gnn_layers_per_level: 2
+
+data:
+  species: "human"
+  platform: "visium"
